@@ -1,13 +1,40 @@
 plugins {
-    id 'org.springframework.boot' version '3.0.2'
-    id 'io.spring.dependency-management' version '1.1.0'
-    id 'java'
-    id 'org.asciidoctor.convert' version '1.5.8'
+    id "org.springframework.boot" version "3.0.4"
+    id "io.spring.dependency-management" version "1.1.0"
+    id "java"
+    id "org.asciidoctor.convert" version "1.5.8"
 }
 
-group = 'com.zhechengdata'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+// 在plugins块之后定义版本号
+ext {
+    // Spring相关版本
+    springBootVersion = "3.0.4"
+    springDependencyManagementVersion = "1.1.0"
+    r2dbcVersion = "Arabba-SR14"
+
+    // 数据库相关版本
+    postgresqlVersion = "42.5.4"
+    mysqlVersion = "8.0.32"
+    flywayVersion = "11.4.0"
+
+    // 工具库版本
+    lombokVersion = "1.18.26"
+    arthasVersion = "3.6.7"
+
+    // 测试相关版本
+    junitVersion = "5.9.2"
+    mockitoVersion = "5.2.0"
+
+	// Spring Integration版本
+	springIntegrationVersion = "6.0.4"
+
+    // 设置snippetsDir
+    set("snippetsDir", file("build/generated-snippets"))
+}
+
+group = "com.zhechengdata"
+version = "0.0.1-SNAPSHOT"
+sourceCompatibility = "17"
 
 configurations {
     compileOnly {
@@ -16,45 +43,83 @@ configurations {
 }
 
 repositories {
+    // 添加阿里云中央仓库
+    maven { url "https://maven.aliyun.com/repository/public/" }
+    maven { url "https://maven.aliyun.com/repository/central/" }
+    maven { url "https://maven.aliyun.com/repository/spring/" }
+	// Spring 官方仓库
+	maven { url "https://repo.spring.io/release" }
+		// 备用仓库
     mavenCentral()
 }
 
-ext {
-    set('snippetsDir', file("build/generated-snippets"))
+// 集中管理依赖版本
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+//        mavenBom "io.r2dbc:r2dbc-bom:${r2dbcVersion}"
+    }
+
+    dependencies {
+        // 在这里定义特定的依赖版本
+        dependency "org.postgresql:postgresql:${postgresqlVersion}"
+        dependency "org.projectlombok:lombok:${lombokVersion}"
+        dependency "com.taobao.arthas:arthas-spring-boot-starter:${arthasVersion}"
+        dependency "org.flywaydb:flyway-core:${flywayVersion}"
+        dependency "org.flywaydb:flyway-mysql:${flywayVersion}"
+        dependency "org.flywaydb:flyway-postgresql:${flywayVersion}"
+    }
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
-    implementation 'org.springframework.boot:spring-boot-starter-integration'
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
-    implementation 'org.springframework.integration:spring-integration-http'
-    implementation 'org.springframework.integration:spring-integration-mail'
-    implementation 'org.springframework.integration:spring-integration-redis'
-    implementation 'org.springframework.integration:spring-integration-security'
-    implementation 'org.springframework.integration:spring-integration-webflux'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.taobao.arthas:arthas-spring-boot-starter:3.6.7'
-    runtimeOnly 'org.postgresql:postgresql'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'io.projectreactor:reactor-test'
-    testImplementation 'org.springframework.integration:spring-integration-test'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    testImplementation 'org.springframework.security:spring-security-test'
+    // 使用集中管理的版本，不需要指定版本号
+    // Spring Boot依赖
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-redis-reactive:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-integration:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-mail:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-r2dbc:${springBootVersion}"
+
+    // Spring Integration依赖
+    implementation "org.springframework.integration:spring-integration-http:${springIntegrationVersion}"
+    implementation "org.springframework.integration:spring-integration-mail:${springIntegrationVersion}"
+    implementation "org.springframework.integration:spring-integration-redis:${springIntegrationVersion}"
+    implementation "org.springframework.integration:spring-integration-security:${springIntegrationVersion}"
+    implementation "org.springframework.integration:spring-integration-webflux:${springIntegrationVersion}"
+
+    // R2DBC驱动
+    implementation "org.postgresql:r2dbc-postgresql:1.0.7.RELEASE"
+    implementation "io.asyncer:r2dbc-mysql:1.4.0"
+    implementation "io.r2dbc:r2dbc-pool:1.0.2.RELEASE"
+
+    // Flyway - 使用集中管理的版本
+    implementation "org.flywaydb:flyway-core:${flywayVersion}"
+    implementation "org.flywaydb:flyway-mysql:${flywayVersion}"
+    implementation "org.flywaydb:flyway-database-postgresql:${flywayVersion}"
+
+    // 其他依赖 - 使用集中管理的版本
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+    runtimeOnly "com.taobao.arthas:arthas-spring-boot-starter:${arthasVersion}"
+    runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
+
+    // 测试依赖
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+//    testImplementation "io.projectreactor:reactor-test"
+    testImplementation "org.springframework.integration:spring-integration-test:${springIntegrationVersion}"
+//    testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc"
+//    testImplementation "org.springframework.security:spring-security-test"
 }
 
-tasks.named('test') {
+tasks.named("test") {
     outputs.dir snippetsDir
     useJUnitPlatform()
 }
 
-tasks.named('asciidoctor') {
+tasks.named("asciidoctor") {
     inputs.dir snippetsDir
     dependsOn test
 }
