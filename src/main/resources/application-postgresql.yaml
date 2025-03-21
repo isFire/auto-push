@@ -1,5 +1,5 @@
 spring:
     r2dbc:
-        url: r2dbc:postgresql://localhost:5432/autopush
+        url: r2dbc:postgresql://localhost:5432/auto-push
     flyway:
         locations: classpath:db/migration/postgresql

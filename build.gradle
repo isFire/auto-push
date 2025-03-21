@@ -75,10 +75,10 @@ dependencies {
     // 使用集中管理的版本，不需要指定版本号
     // Spring Boot依赖
     implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
-    implementation "org.springframework.boot:spring-boot-starter-data-redis-reactive:${springBootVersion}"
+//    implementation "org.springframework.boot:spring-boot-starter-data-redis-reactive:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-integration:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-mail:${springBootVersion}"
-    implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
+//    implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-data-r2dbc:${springBootVersion}"
@@ -86,7 +86,7 @@ dependencies {
     // Spring Integration依赖
     implementation "org.springframework.integration:spring-integration-http:${springIntegrationVersion}"
     implementation "org.springframework.integration:spring-integration-mail:${springIntegrationVersion}"
-    implementation "org.springframework.integration:spring-integration-redis:${springIntegrationVersion}"
+//    implementation "org.springframework.integration:spring-integration-redis:${springIntegrationVersion}"
     implementation "org.springframework.integration:spring-integration-security:${springIntegrationVersion}"
     implementation "org.springframework.integration:spring-integration-webflux:${springIntegrationVersion}"
 
@@ -94,6 +94,10 @@ dependencies {
     implementation "org.postgresql:r2dbc-postgresql:1.0.7.RELEASE"
     implementation "io.asyncer:r2dbc-mysql:1.4.0"
     implementation "io.r2dbc:r2dbc-pool:1.0.2.RELEASE"
+
+    // 添加JDBC驱动，Flyway需要使用JDBC连接
+    runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
+    runtimeOnly "com.mysql:mysql-connector-j:${mysqlVersion}"
 
     // Flyway - 使用集中管理的版本
     implementation "org.flywaydb:flyway-core:${flywayVersion}"
@@ -104,7 +108,6 @@ dependencies {
     compileOnly "org.projectlombok:lombok"
     annotationProcessor "org.projectlombok:lombok"
     runtimeOnly "com.taobao.arthas:arthas-spring-boot-starter:${arthasVersion}"
-    runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
 
     // 测试依赖
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"

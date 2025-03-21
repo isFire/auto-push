@@ -1,5 +1,8 @@
 spring:
     r2dbc:
-        url: r2dbc:mysql://localhost:3306/autopush
+        url: r2dbc:mysql://172.26.32.105:3306/auto-push
+        username: auto-push
+        password: 123456
+    # 移除Flyway配置，由FlywayConfig类自动检测并配置
     flyway:
         locations: classpath:db/migration/mysql

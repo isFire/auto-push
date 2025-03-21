@@ -2,7 +2,6 @@ package com.zhechengdata.autopush.config;
 
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -25,10 +24,10 @@ public class DatabaseConfig extends AbstractR2dbcConfiguration {
     public ConnectionFactoryInitializer initializer(ConnectionFactory connectionFactory) {
         ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
         initializer.setConnectionFactory(connectionFactory);
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator(
-                new ClassPathResource("schema.sql")
-        );
-        initializer.setDatabasePopulator(populator);
+//        ResourceDatabasePopulator populator = new ResourceDatabasePopulator(
+//                new ClassPathResource("schema.sql")
+//        );
+//        initializer.setDatabasePopulator(populator);
         return initializer;
     }
 
